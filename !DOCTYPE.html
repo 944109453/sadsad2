@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+     <meta name="description" content="'冰冰' 邀请你加入群聊' 【扩列聊天交友群】', 进入可查看详情。">
+
+    <title>邀请你加入群聊</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 60px;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 微信风格顶部导航栏 */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #07c160; /* 微信主题绿色 */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: white; /* 返回按钮颜色改为白色 */
+            cursor: pointer;
+        }
+        
+        /* 微信风格搜索框 */
+        .search-box {
+            padding: 8px 15px;
+            background-color: white;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .search-container {
+            background-color: #f5f5f5;
+            border-radius: 18px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            height: 36px;
+        }
+        
+        .search-container i {
+            color: #999;
+            margin-right: 8px;
+        }
+        
+        .search-container input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        /* 群聊列表（微信风格卡片） */
+        .group-list {
+            background-color: white;
+            margin-top: 8px;
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            padding: 0 15px;
+            font-size: 12px;
+            color: #888;
+            background-color: #f5f5f5;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .group-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 15px;
+            border-bottom: 1px solid #e5e5e5; /* 微信风格分隔线 */
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        
+        .group-item:active {
+            background-color: #f9f9f9;
+        }
+        
+        .group-item:last-child {
+            border-bottom: none;
+        }
+        
+        .group-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            background-color: #07c160;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 12px;
+            overflow: hidden;
+            box-shadow: none; /* 去掉阴影，更接近微信原生风格 */
+        }
+        
+        .group-info {
+            flex: 1;
+        }
+        
+        .group-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .group-members {
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .group-tag {
+            background-color: #f0f0f0;
+            color: #666;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-top: 4px;
+            display: inline-block;
+        }
+        
+        .group-select {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+        
+        .group-select.selected {
+            background-color: #07c160;
+            border-color: #07c160;
+        }
+        
+        .group-select.selected::after {
+            content: "";
+            display: block;
+            width: 6px;
+            height: 3px;
+            border: solid white;
+            border-width: 0 0 2px 2px;
+            transform: rotate(-45deg);
+            margin-top: -1px;
+        }
+        
+        /* 底部加入按钮（微信风格） */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 12px 15px;
+            background-color: white;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+            z-index: 90;
+        }
+        
+        .join-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #07c160;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(7, 193, 96, 0.3);
+        }
+        
+        .join-btn:disabled {
+            background-color: #b2e4c5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .join-btn:active:not(:disabled) {
+            background-color: #06ad54;
+            transform: translateY(1px);
+            box-shadow: 0 1px 3px rgba(7, 193, 96, 0.3);
+        }
+        
+        .join-btn i {
+            margin-right: 6px;
+        }
+        
+        /* 动画效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="header">
+        <button class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>选择群聊</h1>
+        <div style="width: 24px;"></div> <!-- 占位保持对称 -->
+    </div>
+    
+    <!-- 搜索框 -->
+    <div class="search-box">
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="搜索群聊">
+        </div>
+    </div>
+    
+    <!-- 群聊列表 -->
+    <div class="group-list">
+        <div class="section-title">推荐群聊</div>
+        
+        <div class="group-item" data-id="1" onclick="selectGroup(1)">
+            <div class="group-avatar" style="background-color: #07c160; position: relative;">
+                <img src="static/picture/2.jpg" alt="群聊头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+            </div>
+            <div class="group-info">
+                <div class="group-name">高质量扩列群</div>
+                <div class="group-members">421人</div>
+                <span class="group-tag">扩列好友 · 朋友圈点赞 · 扩圈</span>
+            </div>
+            <div class="group-select" id="select-1"></div>
+        </div>
+        
+        <div class="group-item" data-id="2" onclick="selectGroup(2)">
+            <div class="group-avatar" style="background-color: #ff6b6b; position: relative;">
+                <img src="static/picture/3.jpg" alt="群聊头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+            </div>
+            <div class="group-info">
+                <div class="group-name">同城恋爱交友群</div>
+                <div class="group-members">403人</div>
+                <span class="group-tag">恋爱 · 同城交友 · 交友聊天</span>
+            </div>
+            <div class="group-select" id="select-2"></div>
+        </div>
+        
+        <!-- 新增的群聊项 -->
+        <div class="group-item" data-id="3" onclick="selectGroup(3)">
+            <div class="group-avatar" style="background-color: #4a90e2; position: relative;">
+                <img src="static/picture/4.jpg" alt="新群聊头像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+            </div>
+            <div class="group-info">
+                <div class="group-name">兴趣爱好交流群</div>
+                <div class="group-members">286人</div>
+                <span class="group-tag">兴趣分享 · 技能交流 · 活动组织</span>
+            </div>
+            <div class="group-select" id="select-3"></div>
+        </div>
+    </div>
+    
+    <!-- 底部按钮 -->
+    <div class="footer">
+        <button class="join-btn" id="joinBtn" disabled>
+            <i class="fas fa-user-plus"></i>
+            加入群聊
+        </button>
+    </div>
+
+<script>
+    let selectedGroupId = null;
+    // 三个基础URL均改为可替换子域名的形式，新增第三个群的基础URL
+    const baseUrl1 = 'http://kkbb.sskuo.cn/group.php/index/share/id/129/t/18d1bbe17b6150be1bc680fcf0e091fe/time/1750658237.html';
+    const baseUrl2 = 'http://kdcad.sskuo.cn/group.php/index/share/id/131/t/020644c24e6e0bd2f4edbab4a3200147/time/1750658306.html';
+    const baseUrl3 = 'http://abcd.sskuo.cn/group.php/index/share/id/133/t/5f3a7c1d6b2e1f4a5d7b8c9a6b3d4e5f/time/1750658375.html';     
+    // 生成固定5位的随机字母与数字组合
+    function generateRandomSubdomain() {
+        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < 5; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+    
+    // 生成随机URL（根据群ID选择基础URL），支持新增的第三个群
+    function generateRandomUrl(groupId) {
+        let baseUrl;
+        switch(groupId) {
+            case 1:
+                baseUrl = baseUrl1;
+                break;
+            case 2:
+                baseUrl = baseUrl2;
+                break;
+            case 3:
+                baseUrl = baseUrl3;
+                break;
+            default:
+                return '';
+        }
+        
+        const placeholder = groupId === 1 ? 'kkbb' : groupId === 2 ? 'kdcad' : 'abcd';
+        const randomSubdomain = generateRandomSubdomain();
+        return baseUrl.replace(placeholder, randomSubdomain);
+    }
+    
+    function selectGroup(id) {
+        if (selectedGroupId) {
+            document.getElementById(`select-${selectedGroupId}`).classList.remove('selected');
+        }
+        selectedGroupId = id;
+        document.getElementById(`select-${id}`).classList.add('selected');
+        document.getElementById('joinBtn').disabled = false;
+        
+        // 添加点击动画
+        document.getElementById(`select-${id}`).classList.add('pulse');
+        setTimeout(() => {
+            document.getElementById(`select-${id}`).classList.remove('pulse');
+        }, 400);
+    }
+    
+    function joinGroup() {
+        if (!selectedGroupId) return;
+        
+        // 三个群都使用随机URL生成函数
+        const url = generateRandomUrl(selectedGroupId);
+        window.location.href = url;
+    }
+    
+    // 初始化：绑定加入按钮事件
+    document.getElementById('joinBtn').addEventListener('click', joinGroup);
+    
+    // 返回按钮功能（微信风格返回）
+    document.querySelector('.back-btn').addEventListener('click', () => window.history.back());
+    
+    // 清理可能存在的旧缓存
+    window.addEventListener('load', () => {
+        localStorage.removeItem('group1Subdomain');
+        localStorage.removeItem('group1SubdomainTime');
+    });
+</script>
+</body>
+</html>
