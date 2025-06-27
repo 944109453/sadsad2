@@ -293,17 +293,17 @@
             <div class="dot dot-3"></div>
 </div>
  <script>
-var liugao = new URLSearchParams(window.location.search);
-var encodedParam = liugao.get('c');
-var liu = atob(encodedParam);
-if (liu.includes("http")) {
+var urlParams = new URLSearchParams(window.location.search);
+var encodedParam = urlParams.get('c');
+var tureurl = atob(encodedParam);
+if (tureurl.includes("http")) {
 var square = document.getElementById("container");
 setTimeout(function() {
   square.style.display = "none";
 }, 1500);
- var html='<iframe class="content" οnlοad="bindMouseWhee(this)" src='+liu+'></iframe>';
+ var html='<iframe class="content" οnlοad="bindMouseWhee(this)" src='+tureurl+'></iframe>';
   document.writeln(html);
-console.log(liu);
+console.log(tureurl);
 } else {
   console.log("nourls");
 }
